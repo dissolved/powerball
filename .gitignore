@@ -107,7 +107,6 @@ Thumbs.db
 *.tar.bz2
 *.tar
 *.log
-*.csv
 *.dat
 *.out
 *.pid

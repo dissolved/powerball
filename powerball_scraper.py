@@ -1,5 +1,6 @@
 import os
 import csv
+import re
 import sys
 from datetime import datetime
 
@@ -7,14 +8,13 @@ import requests
 from bs4 import BeautifulSoup
 
 URL = 'https://portalseven.com/lottery/powerball_jackpot_winners.jsp'
-TABLE_ROW_CLASS_NAME = 'bg-light'
+DRAWING_DETAILS_CLASS_NAME = 'bg-light'
+DIVIDER_CLASS_NAME = "bg-dark"
 VALIDATING_DIRECTORY_STR = 'Validating directory...'
 DIRECTORY_NOT_FOUND_STR = 'Directory not found. Please try again.'
 CREATING_FILE_STR = 'Creating file in directory...'
 WRITING_FILE_SUCCESS_STR = 'Successfully wrote to file: '
 
-
-# Define functions
 
 def get_html_content(url):
     try:
@@ -35,38 +35,54 @@ def get_table_rows_from_html(html_content):
         rows += table.find_all('tr')
     return rows
 
-def parse_rows(rows, row_class_name=TABLE_ROW_CLASS_NAME):
+def parse_rows(rows):
     data = []
 
     for row in rows:
-        if row.get('class') == [row_class_name]:
+        if row.get('class') == [DRAWING_DETAILS_CLASS_NAME]:
             drawing_data = parse_drawing_details(row)
             if drawing_data:
+                drawing_data.append([]) # empty winner data array initialization
                 data.append(drawing_data)
-                # data_row = [cell.text.strip() for cell in cells]
-
-                # try:
-                #     following_row = rows[i + 1]
-                #     following_cells = following_row.find_all('td')
-                #     data_row.extend([cell.text.strip() for cell in following_cells])
-
-                #     data.append(data_row)
-                # except IndexError:
-                #     data.append(data_row)
+            else:
+                next
+        elif row.get('class') == [DIVIDER_CLASS_NAME]:
+            next
+        else:
+            winner_data = parse_winner_details(row)
+            if winner_data:
+                data[-1][-1].append(winner_data)
             else:
                 next
     return data
 
 def parse_drawing_details(row):
-  try:
-    draw_date, jackpot_amount, winning_numbers = [item.get_text() for item in row.select('td b')]
-    draw_date = datetime.strptime(draw_date, "%B %d, %Y")
-    jackpot_amount = parse_money(jackpot_amount)
-    return [draw_date, jackpot_amount, winning_numbers]
+    try:
+        draw_date, jackpot_amount, winning_numbers = [item.get_text().strip() for item in row.select('td b')]
+        draw_date = datetime.strptime(draw_date, "%B %d, %Y")
+        jackpot_amount = parse_money(jackpot_amount)
+        winning_numbers = re.sub(r'(?<=\D)0|\s|^0', '', winning_numbers)
+        return [draw_date, jackpot_amount, winning_numbers]
 
-  except Exception as e:
-      print(f'Error occurred while parsing row: {row}', file=sys.stderr)
-      return None
+    except Exception as e:
+        print(f'Error occurred while parsing row: {row}', file=sys.stderr)
+        return None
+
+def parse_winner_details(row):
+    if len(row.select('th')) > 0:
+        print(f"Processing {row.get_text()}")
+        return None
+
+    try:
+        winner_name = row.select_one('p.text-success b').get_text()
+        store_details = row.select_one('p.text-primary')
+        store_name = store_details.select_one('b').get_text()
+        store_address = re.split(rf'{store_name}\s*,', store_details.get_text())[-1].strip()
+        return [winner_name, store_name, store_address]
+
+    except Exception as e:
+        print(f'Error occurred while parsing row: {row}', file=sys.stderr)
+        return None
 
 def parse_money(money_str):
     """
@@ -102,14 +118,13 @@ def parse_money(money_str):
     # Extract the numerical value from the string
     if 'million' in money_str:
         multiplier = 1000000
-        money_str = money_str.replace('million', '')
     elif 'billion' in money_str:
         multiplier = 1000000000
-        money_str = money_str.replace('billion', '')
     else:
         multiplier = 1
 
     try:
+        money_str = re.sub(r'[^0-9.]', '', money_str)
         value = float(money_str.strip())
         return int(value * multiplier)
     except ValueError:
