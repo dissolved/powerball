@@ -1,3 +1,4 @@
+date,jackpot_amount,winning_numbers,winner_details
 2023-07-19 00:00:00,1080000000,7-10-11-13-24/24/2,"[['Unclaimed', 'Las Palmitas Mini Market', '1205 Wall St, Los Angeles, CA 90015']]"
 2023-04-19 00:00:00,252600000,4-11-21-38-64/11/3,"[['Unclaimed', 'Get Go #3279', '265 Highland Rd, Macedonia, OH 44056']]"
 2023-03-04 00:00:00,162600000,10-16-18-40-66/16/3,"[['Unclaimed', 'Gill Brothers', '4622 Cleburne Blvd, Dublin, VA 24084']]"
@@ -124,7 +125,7 @@
 2010-07-31 00:00:00,85700000,1-16-17-41-57/15/3,"[['H&N Family Partnership', 'Circle K', '9110 Airline Hwy, Baton Rouge, LA 70815']]"
 2010-07-10 00:00:00,73900000,20-21-27-28-56/4/4,"[['Elizabeth Choras-Hanna', 'Publix Super Market', '11977 Southern Blvd, Royal Palm Beach, FL 33411']]"
 2010-06-23 00:00:00,97000000,11-30-45-47-48/10/3,"[['The Lucky Thirteen Plus One', ""Shirley's Carry Out"", '22571 Front Street, Curtice, OH 43412'], ['Kim Claassen and Joseph Lamport Jr. ', 'Town Pump', '2401 North Montana Ave, Helena, MT 59601']]"
-2010-06-02 00:00:00,261600000,4-9-14-39-439/38/4,"[['The 2010 Blind Trust (George M. Hoffman)', 'Hub Carry Out & Deli', '245 North Columbus Street,Sunbury, OH 43074']]"
+2010-06-02 00:00:00,261600000,4-9-14-39-43/38/4,"[['The 2010 Blind Trust (George M. Hoffman)', 'Hub Carry Out & Deli', '245 North Columbus Street,Sunbury, OH 43074']]"
 2010-04-21 00:00:00,258500000,11-34-41-49-55/20/2,"[['Christopher ""Chris"" Shaw', 'Break Time', '1000 W College Street,Marshall, MO 65340']]"
 2010-03-13 00:00:00,211700000,6-16-20-31-36/8/5,"[['Sandra Mcneil', ""Gene's Market & Deli "", '163 Speedwell Avenue, Morris Plains, NJ 07950']]"
 2010-02-06 00:00:00,141400000,14-22-52-54-59/4/3,"[['Frank Griffin', 'Wilco', '158 Smokey Park Hwy,Asheville, NC 28806']]"
